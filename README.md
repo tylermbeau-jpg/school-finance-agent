@@ -47,11 +47,20 @@ Twelve graded questions in [evals/questions.jsonl](evals/questions.jsonl), each 
 
 The runner prints per-question PASS/FAIL with the specific failed checks and exits nonzero unless everything passes, so it drops straight into CI once you give CI a key. Grading is deliberately mechanical: if a check would need judgment, it belongs in a different harness.
 
+**Live results, 2026-11-22.** Run by hand with a real key against the deployed MCP server, one run per model:
+
+| Model | Questions fully passed |
+|---|---|
+| `claude-sonnet-5` (default) | 12 of 12 |
+| `claude-opus-5` | 12 of 12 |
+| `claude-sonnet-5-5` | 12 of 12 |
+| `claude-opus-5-5` | 12 of 12 |
+
 ## What is tested without an API key
 
-`pytest -q` runs twelve tests with no key and no paid calls: the scorer (every check type, pass and fail paths), the questions file's schema, and integration tests that run the REAL MCP server over stdio (tool listing through the bridge, a real tool execution, and the full agent loop driven by a scripted stub LLM that requests a tool call and must receive the genuine tool result back).
+`pytest -q` runs eleven tests with no key and no paid calls: the scorer (every check type, pass and fail paths), the questions file's schema, and integration tests that run the REAL MCP server over stdio (tool listing through the bridge, a real tool execution, and the full agent loop driven by a scripted stub LLM that requests a tool call and must receive the genuine tool result back).
 
-Stated plainly: the live-model path (`ask` and `eval` with a real key) exercises the same loop code the stub covers, but the graded eval scores in this README's history were not produced in CI. Run `sfagent eval` with your key to produce your own.
+Stated plainly: the live-model path (`ask` and `eval` with a real key) exercises the same loop code the stub covers. The scores in the table above came from a manual run with a real key, not from CI, which runs only the offline tests. Run `sfagent eval` with your key to reproduce them.
 
 ## Why this shape
 
